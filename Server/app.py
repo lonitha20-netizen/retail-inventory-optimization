@@ -9,7 +9,7 @@ import joblib
 
 # 1. Locate the model file (clustering_model.pkl)
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(base_dir, 'clustering_model.pkl')
+model_path = os.path.join(base_dir, 'Server', 'clustering_model.pkl')
 
 # 2. Load the model into the 'model' variable
 try:
