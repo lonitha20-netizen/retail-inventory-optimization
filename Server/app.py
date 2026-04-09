@@ -7,10 +7,10 @@ app = Flask(__name__)
 
 # This helps the app find your model even inside the subfolder
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(base_dir, 'sales_model.pkl')
+model_path = os.path.join(base_dir, 'clustering_model.pkl')
 
 try:
-    model = joblib.load(model_path)
+    model = joblib.load('clustering_model.pkl')
     print("Model loaded successfully!")
 except Exception as e:
     print(f"Error loading model: {e}")
