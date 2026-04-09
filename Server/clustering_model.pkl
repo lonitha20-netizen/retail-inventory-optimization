@@ -25,7 +25,7 @@ model = RandomForestRegressor(n_estimators=20, random_state=42, n_jobs=-1)
 model.fit(X_train, y_train)
 
 # 6. Save the model so the Flask UI can use it later
-joblib.dump(model, 'sales_model.pkl')
+joblib.dump(model, 'clustering_model.pkl')
 
 print("--- SUCCESS ---")
 print(f"Model Accuracy (R2 Score): {model.score(X_test, y_test):.4f}")
