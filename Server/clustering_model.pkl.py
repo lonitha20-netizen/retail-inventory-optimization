@@ -1,0 +1,32 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+import joblib
+
+# 1. Load the cleaned data you made in Step 1
+print("Loading cleaned dataset...")
+df = pd.read_csv('cleaned_retail_data.csv')
+
+# 2. Convert Store Type to numbers (A=1, B=2, C=3)
+df['Type'] = df['Type'].map({'A': 1, 'B': 2, 'C': 3})
+
+# 3. Pick the features the model will learn from
+features = ['Store', 'Dept', 'IsHoliday', 'Size', 'Temperature', 
+            'Fuel_Price', 'CPI', 'Unemployment', 'Type', 'Month', 'WeekOfYear']
+X = df[features]
+y = df['Weekly_Sales']
+
+# 4. Split data: 80% for training, 20% for testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 5. Train the Random Forest Model
+print("Training the Sales Prediction Model... (This takes about 30-60 seconds)")
+model = RandomForestRegressor(n_estimators=20, random_state=42, n_jobs=-1)
+model.fit(X_train, y_train)
+
+# 6. Save the model so the Flask UI can use it later
+joblib.dump(model, 'sales_model.pkl')
+
+print("--- SUCCESS ---")
+print(f"Model Accuracy (R2 Score): {model.score(X_test, y_test):.4f}")
+print("Model saved as 'sales_model.pkl'")
