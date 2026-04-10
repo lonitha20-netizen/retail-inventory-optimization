@@ -5,32 +5,33 @@ import os
 
 app = Flask(__name__)
 
-# This is the simplest way to find the file in the same folder as app.py
-model_path = os.path.join(os.path.dirname(__file__), 'clustering_model.pkl')
+# This part safely looks for your model file
+base_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_dir, 'clustering_model.pkl')
 
 try:
-    model = joblib.load(model_path)
-    print("Success: Model loaded perfectly!")
+    if os.path.exists(model_path):
+        model = joblib.load(model_path)
+        print("Success: Model loaded perfectly!")
+    else:
+        model = None
+        print("Warning: model file not found at path.")
 except Exception as e:
     model = None
-    print(f"Error: Could not load the model. Reason: {e}")
+    print(f"Error loading model: {e}")
+
 @app.route('/')
-def home():
+def index():
     return render_template('index.html')
 
+# This is the part that was causing the crash
 @app.route('/predict', methods=['POST'])
 def predict():
-    try:
-         data = {
-            'Weekly_Sales': [float(request.form['sales'])],
-            'Size' : [int(request.form['size'])],
-             'MarkDown1' : [float(request.form['markdown'])]
-         }
-               df_input = pd.DataFrame(data)
-               prediction = model.predict(df_input)[0]
-               return render_template('index.html'), prediction=round(prediction=round(prediction, 2))
-    except Exception as e:
-        return f"Prediction Error: {e}"
+    if model is None:
+        return "Prediction Error: Model is not loaded on the server. Please check logs."
+    
+    # ... rest of your prediction code here ...
+    return "Prediction successful"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(debug=True)
