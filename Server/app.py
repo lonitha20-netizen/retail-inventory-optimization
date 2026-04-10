@@ -22,18 +22,10 @@ def home():
 def predict():
     try:
         data = {
-            'Store': [int(request.form['Store'])],
-            'Dept': [int(request.form['Dept'])],
-            'IsHoliday': [0], 
-            'Size': [int(request.form['Size'])],
-            'Temperature': [55.0],
-            'Fuel_Price': [3.5],
-            'CPI': [210.0],
-            'Unemployment': [8.0],
-            'Type': [int(request.form['Type'])],
-            'Month': [int(request.form['Month'])],
-            'WeekOfYear': [int(request.form['Month']) * 4]
-        }
+    'Weekly_Sales': [float(request.form['sales'])],
+    'Size': [int(request.form['size'])],
+    'MarkDown1': [float(request.form['markdown'])]
+}
         df_input = pd.DataFrame(data)
         prediction = model.predict(df_input)[0]
         return render_template('index.html', prediction=round(prediction, 2))
