@@ -21,20 +21,14 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-
-       df_input = pd.DataFrame(data)
-
-prediction = model.predict(df_input)[0]
-
-labels = {
-    0: "Standard Inventory",
-    1: "High Priority",
-    2: "Seasonal/Promotional"
-}
-
-result = labels.get(prediction, "Unknown")
-
-return render_template('index.html', prediction=result)
+         data = {
+            'Weekly_Sales': [float(request.form['sales'])],
+            'Size' : [int(request.form['size'])],
+             'MarkDown1' : [float(request.form['markdown'])]
+         }
+               df_input = pd.DataFrame(data)
+               prediction = model.predict(df_input)[0]
+               return render_template('index.html'), prediction=round(prediction=round(prediction, 2))
     except Exception as e:
         return f"Prediction Error: {e}"
 
